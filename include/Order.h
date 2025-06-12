@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 enum class OrderType { Market, Limit };
 enum class Side { Buy, Sell };
 
