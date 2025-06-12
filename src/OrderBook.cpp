@@ -1,5 +1,6 @@
 #include "OrderBook.h"
 #include <iostream>
+#include <algorithm>
 
 OrderBook::OrderBook(const std::string& ticker) : ticker(ticker) {}
 
@@ -9,6 +10,26 @@ void OrderBook::addOrder(const Order& order) {
     } else {
         sellOrders.push_back(order);
     }
+}
+
+void OrderBook::removeOrder(int orderId) {
+    auto orderMatches = [orderId](const Order& order) {
+        return order.getId() == orderId;
+    };
+
+    auto buyIterator = std::remove_if(buyOrders.begin(), buyOrders.end(), orderMatches);
+    if (buyIterator != buyOrders.end()) {
+        buyOrders.erase(buyIterator, buyOrders.end());
+        return;
+    }
+
+    auto sellIterator = std::remove_if(sellOrders.begin(), sellOrders.end(), orderMatches);
+    if (sellIterator != sellOrders.end()) {
+        sellOrders.erase(sellIterator, sellOrders.end());
+        return;
+    }
+
+    std::cout << "Order ID " << orderId << " not found in book.\n";
 }
 
 void OrderBook::printOrders() const {

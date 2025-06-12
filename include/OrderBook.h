@@ -9,6 +9,7 @@ public:
     OrderBook(const std::string& ticker);
 
     void addOrder(const Order& order);
+    void removeOrder(int orderId);
     void printOrders() const;
 
     std::string getTicker() const;
