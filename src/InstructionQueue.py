@@ -5,7 +5,8 @@ from time import time
 class InstructionType(Enum):
     NEW_ORDER = "New Order"
     CANCEL_ORDER = "Cancel Order"
-    UPDATE_ORDER = "Update Order"
+    UPDATE_PRICE = "Update Price"
+    UPDATE_QUANTITY = "Update Quantity"
 
 class Instruction:
 
