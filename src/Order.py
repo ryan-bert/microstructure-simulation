@@ -11,9 +11,9 @@ class Side(Enum):
 class Order:
 
     # Constructor for the Order class
-    def __init__(self, order_id, side, price, quantity, order_type):
+    def __init__(self, order_id, side, quantity, order_type, price=None):
         self.id = order_id
         self.side = side
-        self.price = price
         self.quantity = quantity
         self.type = order_type
+        self.price = price
