@@ -174,5 +174,13 @@ class MatchingEngine:
 
         # Place non-marketable portion of limit order on the book
         if quantity_to_fill > 0:
-            order.quantity = quantity_to_fill
-            self.order_book.add_order(order)
+
+            # Create a copy of the order with remaining quantity
+            remaining_order = Order(
+                order_id=order.id,
+                side=order.side,
+                price=order.price,
+                quantity=quantity_to_fill,
+                order_type=order.type
+            )
+            self.order_book.add_order(remaining_order)
