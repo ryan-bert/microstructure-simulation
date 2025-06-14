@@ -18,6 +18,10 @@ $(TARGET): $(OBJ)
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+# Run the program (depends on build)
+run: $(TARGET)
+	./$(TARGET)
+
 # Clean build artifacts
 clean:
 	rm -f $(OBJ) $(TARGET)
