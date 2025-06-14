@@ -16,7 +16,15 @@ class MatchingEngine:
 
     # Method to process the next instruction in the queue
     def process_next_instruction(self):
-        return
+        
+        # Get the next instruction from the queue
+        instruction = self.instruction_queue.process_next_instruction()
+
+        # If no instruction is available, return
+        if not instruction:
+            return
+
+        
 
 
     # Method to match market orders
@@ -80,4 +88,63 @@ class MatchingEngine:
 
     # Method to place limit orders
     def place_limit_order(self, order):
-        
+
+        # Determine book and price matching condition
+        if order.side == Side.BUY:
+            book = self.order_book.asks
+            price_is_matchable = lambda p: p <= order.price
+        else:
+            book = self.order_book.bids
+            price_is_matchable = lambda p: p >= order.price
+
+        # Define order quantity to fill
+        quantity_to_fill = order.quantity
+
+        # Iterate through (if any) marketable price levels
+        while quantity_to_fill > 0 and book:
+
+            # Define best price level and its associated queue
+            best_price = next(iter(book))
+            queue = book[best_price]
+
+            # Break if it is NOT an marketable limit order
+            if not price_is_matchable(best_price):
+                break
+
+            # Iterate through marketable orders at the best price
+            while queue and quantity_to_fill > 0:
+
+                # Define the resting order and match quantity
+                resting_order = queue[0]
+                match_qty = min(quantity_to_fill, resting_order.quantity)
+
+                # Create a Trade object
+                trade = Trade(
+                    trade_id=self.trade_id_counter,
+                    buy_order_id=order.id if order.side == Side.BUY else resting_order.id,
+                    sell_order_id=order.id if order.side == Side.SELL else resting_order.id,
+                    price=best_price,
+                    quantity=match_qty,
+                    timestamp=time()
+                )
+
+                # Log the trade and increment counter
+                self.executed_trades.log_trade(trade)
+                self.trade_id_counter += 1
+
+                # Adjust quantities after trade
+                quantity_to_fill -= match_qty
+                resting_order.quantity -= match_qty
+
+                # Remove resting order if filled
+                if resting_order.quantity == 0:
+                    queue.popleft()
+
+            # Remove price level if empty
+            if not queue:
+                del book[best_price]
+
+        # Place non-marketable portion of limit order on the book
+        if quantity_to_fill > 0:
+            order.quantity = quantity_to_fill
+            self.order_book.add_order(order)
