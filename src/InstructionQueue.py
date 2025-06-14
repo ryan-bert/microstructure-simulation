@@ -3,6 +3,8 @@ from collections import deque
 from time import time
 
 class InstructionType(Enum):
+
+    # Define the types of instructions
     NEW_ORDER = "New Order"
     CANCEL_ORDER = "Cancel Order"
     UPDATE_PRICE = "Update Price"
