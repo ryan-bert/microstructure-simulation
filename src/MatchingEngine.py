@@ -24,7 +24,35 @@ class MatchingEngine:
         if not instruction:
             return
 
-        
+        # Process new order instructions
+        if instruction.type == InstructionType.NEW_ORDER:
+
+            # Process new order instruction
+            order = instruction.order
+
+            # Process order based on its type
+            if order.type == OrderType.MARKET:
+                self.match_market_order(order)
+            elif order.type == OrderType.LIMIT:
+                self.place_limit_order(order)
+            else:
+                raise ValueError("Invalid order type")
+            
+        # Process cancel order instructions
+        elif instruction.type == InstructionType.CANCEL_ORDER:
+            self.order_book.remove_order(instruction.order.id)
+
+        # Process price update instructions
+        elif instruction.type == InstructionType.UPDATE_PRICE:
+            self.order_book.update_order_price(instruction.order.id, instruction.order.price)
+
+        # Process quantity update instructions
+        elif instruction.type == InstructionType.UPDATE_QUANTITY:
+            self.order_book.update_order_quantity(instruction.order.id, instruction.order.quantity)
+
+        # Invalid instruction type
+        else:
+            raise ValueError("Invalid instruction type")
 
 
     # Method to match market orders
