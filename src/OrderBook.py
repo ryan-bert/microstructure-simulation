@@ -5,8 +5,7 @@ from src.Order import Side
 class OrderBook:
 
     # Constructor for the OrderBook class (ordered by best price)
-    def __init__(self, ticker):
-        self.ticker = ticker
+    def __init__(self):
         self.bids = SortedDict(lambda x: -x)      # Bids: descending
         self.asks = SortedDict()                  # Asks: ascending
 

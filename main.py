@@ -4,7 +4,7 @@ from src.OrderBook import OrderBook
 def main():
 
     # Create an orderboom for a given ticker
-    spy_order_book = OrderBook("SPY")
+    order_book = OrderBook()
 
     # Create some liquidity
     order1 = Order(order_id=1, side=Side.BUY, price=100.0, quantity=10, order_type=OrderType.LIMIT)
@@ -18,25 +18,25 @@ def main():
     order9 = Order(order_id=9, side=Side.BUY, price=104.0, quantity=4, order_type=OrderType.LIMIT)
 
     # Add orders to the order book
-    spy_order_book.add_order(order1)
-    spy_order_book.add_order(order2)
-    spy_order_book.add_order(order3)
-    spy_order_book.add_order(order4)
-    spy_order_book.add_order(order5)
-    spy_order_book.add_order(order6)
-    spy_order_book.add_order(order7)
-    spy_order_book.add_order(order8)
-    spy_order_book.add_order(order9)
+    order_book.add_order(order1)
+    order_book.add_order(order2)
+    order_book.add_order(order3)
+    order_book.add_order(order4)
+    order_book.add_order(order5)
+    order_book.add_order(order6)
+    order_book.add_order(order7)
+    order_book.add_order(order8)
+    order_book.add_order(order9)
 
     # Remove an order
-    spy_order_book.remove_order(order_id=3)
+    order_book.remove_order(order_id=3)
 
     # Print the order book
     print("Bids:")
-    for price, orders in spy_order_book.bids.items():
+    for price, orders in order_book.bids.items():
         print(f"Price: {price}, Orders: {[order.id for order in orders]}")
     print("\nAsks:")
-    for price, orders in spy_order_book.asks.items():
+    for price, orders in order_book.asks.items():
         print(f"Price: {price}, Orders: {[order.id for order in orders]}")
 
 
