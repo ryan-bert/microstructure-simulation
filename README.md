@@ -3,9 +3,9 @@
 ## Objects
 
 - Order
-- ExecutedTrade
+- ExecutedTrades
 - OrderBook
-- EventQueue
+- InstructionQueue
 - MakerAgent
 - TakerAgent
 - MatchingEngine
