@@ -2,65 +2,75 @@
 #include <iostream>
 #include <algorithm>
 
-// Constructor for OrderBook class
+// Constructor for OrderBook
 OrderBook::OrderBook(const std::string& ticker) : ticker(ticker) {}
 
-// Method to add an order to the order book
+// Adds a new order to the appropriate map based on side
 void OrderBook::addOrder(const Order& order) {
-
-    // Add order to the END of respective vector
-    if (order.getSide() == Side::Buy) {
-        buyOrders.push_back(order);
-    } else {
-        sellOrders.push_back(order);
-    }
+    auto* book = (order.getSide() == Side::Buy) ? &buyOrders : &sellOrders;
+    (*book)[order.getPrice()].push_back(order);
 }
 
-// Method to remove an order from the order book (by order ID)
-void OrderBook::removeOrder(int orderId){
+// Attempts to remove an order by ID from a given order map (buy or sell)
+// Returns true if the order was found and removed, false otherwise
+bool OrderBook::removeOrderFromBook(std::map<double, std::deque<Order>>& book, int orderId) {
+    for (auto it = book.begin(); it != book.end(); ) {
+        auto& orders = it->second;
 
-    // Lambda function to match an order by ID
-    auto orderMatches = [orderId](const Order& order) {
-        return order.getId() == orderId;
-    };
+        // Remove the matching order(s) from the queue
+        auto removeIt = std::remove_if(orders.begin(), orders.end(), [orderId](const Order& order) {
+            return order.getId() == orderId;
+        });
 
-    // Re-order dead buys to last (and return iterator to the first dead buy)
-    auto startOfDeadBuys = std::remove_if(buyOrders.begin(), buyOrders.end(), orderMatches);
-    // If dead buys are found, resize the vector to remove them
-    if (startOfDeadBuys != buyOrders.end()) {
-        buyOrders.erase(startOfDeadBuys, buyOrders.end());
-        return;
+        if (removeIt != orders.end()) {
+            orders.erase(removeIt, orders.end());
+
+            // If no more orders at this price level, erase the level
+            if (orders.empty()) {
+                it = book.erase(it);
+            } else {
+                ++it;
+            }
+            return true;
+        } else {
+            ++it;
+        }
     }
+    return false;
+}
 
-    // Re-order dead sells to last (and return iterator to the first dead sell)
-    auto sellIterator = std::remove_if(sellOrders.begin(), sellOrders.end(), orderMatches);
-    // If dead sells are found, resize the vector to remove them
-    if (sellIterator != sellOrders.end()) {
-        sellOrders.erase(sellIterator, sellOrders.end());
-        return;
-    }
+// Removes an order by ID, trying both buy and sell maps
+void OrderBook::removeOrder(int orderId) {
+    if (removeOrderFromBook(buyOrders, orderId)) return;
+    if (removeOrderFromBook(sellOrders, orderId)) return;
 
     std::cout << "Order ID " << orderId << " not found in book.\n";
 }
 
+// Prints the current state of the order book
 void OrderBook::printOrders() const {
     std::cout << "Order Book for " << ticker << std::endl;
 
-    std::cout << "Buy Orders:\n";
-    for (const auto& order : buyOrders) {
-        std::cout << "  ID: " << order.getId()
-                  << ", Price: " << order.getPrice()
-                  << ", Qty: " << order.getQuantity() << "\n";
+    std::cout << "Buy Orders (Highest to Lowest):\n";
+    for (const auto& [price, orders] : buyOrders) {
+        for (const auto& order : orders) {
+            std::cout << "  ID: " << order.getId()
+                      << ", Price: " << order.getPrice()
+                      << ", Qty: " << order.getQuantity() << "\n";
+        }
     }
 
-    std::cout << "Sell Orders:\n";
-    for (const auto& order : sellOrders) {
-        std::cout << "  ID: " << order.getId()
-                  << ", Price: " << order.getPrice()
-                  << ", Qty: " << order.getQuantity() << "\n";
+    std::cout << "Sell Orders (Lowest to Highest):\n";
+    for (const auto& [price, orders] : sellOrders) {
+        for (const auto& order : orders) {
+            std::cout << "  ID: " << order.getId()
+                      << ", Price: " << order.getPrice()
+                      << ", Qty: " << order.getQuantity() << "\n";
+        }
     }
 }
 
+// Returns the ticker associated with this order book
 std::string OrderBook::getTicker() const {
     return ticker;
 }

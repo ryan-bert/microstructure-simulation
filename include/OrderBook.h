@@ -1,6 +1,7 @@
 #pragma once
 
-#include <vector>
+#include <map>
+#include <deque>
 #include <string>
 #include "Order.h"
 
@@ -10,7 +11,7 @@ public:
     // Constructor
     OrderBook(const std::string& ticker);
 
-    // Methods to manage orders
+    // Functions to manage orders
     void addOrder(const Order& order);
     void removeOrder(int orderId);
     void printOrders() const;
@@ -21,6 +22,11 @@ public:
 private:
     // Member variables
     std::string ticker;
-    std::vector<Order> buyOrders;
-    std::vector<Order> sellOrders;
+
+    // Ordered maps for buy and sell orders (default: ascending)
+    std::map<double, std::deque<Order>, std::greater<>> buyOrders;
+    std::map<double, std::deque<Order>> sellOrders;
+
+    // Helper functions
+    bool removeOrderFromBook(std::map<double, std::deque<Order>>& book, int orderId);
 };
