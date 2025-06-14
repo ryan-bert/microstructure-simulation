@@ -2,10 +2,16 @@
 
 ## Objects
 
-- Order
-- ExecutedTrades
-- OrderBook
-- InstructionQueue
+
+- Exchange
+    - Market
+        - OrderBook
+            - Order
+        - ExecutedTrades
+        - InstructionQueue
+        - MatchingEngine
+            - *OrderBook
+            - *ExecutedTrades
+            - *InstructionQueue
 - MakerAgent
 - TakerAgent
-- MatchingEngine
