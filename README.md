@@ -3,7 +3,7 @@
 ## Objects
 
 - Order
-- Trade
+- ExecutedTrade
 - OrderBook
 - EventQueue
 - MakerAgent
