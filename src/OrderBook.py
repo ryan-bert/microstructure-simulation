@@ -63,7 +63,9 @@ class OrderBook:
             self.add_order(order)
             return order
 
+        # Order not found
         return None
+
 
     # Method to update the quantity of an order
     def update_order_quantity(self, order_id, new_quantity):
@@ -77,4 +79,5 @@ class OrderBook:
             self.add_order(order)
             return order
 
+        # Order not found
         return None
