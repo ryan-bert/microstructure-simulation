@@ -17,7 +17,8 @@ class MatchingEngine:
     # Method to process the next instruction in the queue
     def process_next_instruction(self):
         return
-    
+
+
     # Method to match market orders
     def match_market_order(self, order):
 
@@ -28,11 +29,11 @@ class MatchingEngine:
             book = self.order_book.bids
         else:
             raise ValueError("Invalid order side")
-        
+
         # Check for NO liquidity, if so, cancel the order (ie do nothing)
         if not book:
             return
-        
+
         # Define quantity to fill (for iteration)
         quantity_to_fill = order.quantity
 
