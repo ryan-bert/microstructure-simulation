@@ -29,3 +29,21 @@ class ExecutedTrades:
             return self.trades[-1]
         # No trades executed
         return None
+
+
+    # Method to print the order book in a readable format
+    def __str__(self):
+
+        # Check if there are any executed trades
+        if not self.trades:
+            return "No executed trades."
+        
+        # Convert trades to string format
+        lines = ["Executed Trades:"]
+        for trade in self.trades:
+            lines.append(f"Trade ID: {trade.trade_id}, Buy Order ID: {trade.buy_order_id}, "
+                         f"Sell Order ID: {trade.sell_order_id}, Price: {trade.price}, "
+                         f"Quantity: {trade.quantity}, Timestamp: {trade.timestamp}")
+
+        # Join the lines into a single string
+        return "\n".join(lines)

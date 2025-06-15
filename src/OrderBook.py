@@ -14,6 +14,10 @@ class OrderBook:
         self.order_lookup = {}
 
 
+    # Method to check if the order book is empty
+    def is_empty(self):
+        return len(self.bids) == 0 and len(self.asks) == 0
+
     # Method to add an order to the order book
     def add_order(self, order):
 
@@ -101,17 +105,25 @@ class OrderBook:
         # Order not found
         return None
     
-    # Method to print the order book
-    def print_order_book(self):
+    # Method to print the order book in a readable format
+    def __str__(self):
 
-        # Bids (With IDs and total quantity)
-        print("Bids:")
+        # Check if the order book is empty
+        if self.is_empty():
+            return "Order Book is empty."
+
+        # Convert bids to string format
+        lines = ["Bids:"]
         for price, orders in self.bids.items():
             total_qty = sum(order.quantity for order in orders)
-            print(f"Price: {price}, Total Qty: {total_qty}, Orders: {[order.id for order in orders]}")
-        
-        # Asks (With IDs and total quantity)
-        print("Asks:")
+            order_ids = [order.id for order in orders]
+            lines.append(f"Price: {price}, Total Qty: {total_qty}, Orders: {order_ids}")
+
+        # Convert asks to string format
+        lines.append("Asks:")
         for price, orders in self.asks.items():
             total_qty = sum(order.quantity for order in orders)
-            print(f"Price: {price}, Total Qty: {total_qty}, Orders: {[order.id for order in orders]}")
+            order_ids = [order.id for order in orders]
+            lines.append(f"Price: {price}, Total Qty: {total_qty}, Orders: {order_ids}")
+
+        return "\n".join(lines)
