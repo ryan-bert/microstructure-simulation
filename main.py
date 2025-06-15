@@ -1,5 +1,6 @@
 from src.Market import Market
 from src.Order import Order, OrderType, Side
+from src.InstructionQueue import InstructionType
 
 #! TODO: BASIC SIMULATION
 # - Instructions getting added to queue
@@ -21,9 +22,22 @@ def main():
     order6 = Order(order_id=6, side=Side.SELL, quantity=20, order_type=OrderType.LIMIT, price=104)
 
     # Add these orders to the instruction queue as NEW_ORDER
-    spy_market.instruction_queue.add_instruction(order1.to_new_order_instruction())
+    spy_market.instruction_queue.add_instruction(order1.to_instruction(InstructionType.NEW_ORDER))
+    spy_market.instruction_queue.add_instruction(order2.to_instruction(InstructionType.NEW_ORDER))
+    spy_market.instruction_queue.add_instruction(order3.to_instruction(InstructionType.NEW_ORDER))
+    spy_market.instruction_queue.add_instruction(order4.to_instruction(InstructionType.NEW_ORDER))
+    spy_market.instruction_queue.add_instruction(order5.to_instruction(InstructionType.NEW_ORDER))
+    spy_market.instruction_queue.add_instruction(order6.to_instruction(InstructionType.NEW_ORDER))
 
+    # Process the instructions in the queue
+    while not spy_market.instruction_queue.is_empty():
+        spy_market.matching_engine.process_next_instruction()
 
+    # Print the order book after processing
+    print("Order Book after processing instructions:")
+    print("Bids:", spy_market.order_book.bids)
+    print("Asks:", spy_market.order_book.asks)
+    print("Executed Trades:", spy_market.executed_trades)
 
 
 if __name__ == "__main__":
