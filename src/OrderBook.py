@@ -6,8 +6,12 @@ class OrderBook:
 
     # Constructor for the OrderBook class (ordered by best price)
     def __init__(self):
-        self.bids = SortedDict(lambda x: -x)      # Bids: descending
-        self.asks = SortedDict()                  # Asks: ascending
+
+        # Bids: descending, Asks: ascending
+        self.bids = SortedDict(lambda x: -x)
+        self.asks = SortedDict()
+        # Quick lookup for price level and side
+        self.order_lookup = {}
 
 
     # Method to add an order to the order book
@@ -28,29 +32,44 @@ class OrderBook:
         # Add order to the end of appropriate queue (FIFO)
         book[order.price].append(order)
 
+        # Track for fast lookup
+        self.order_lookup[order.id] = (order.side, order.price)
+
 
     # Method to remove an order by its ID
     def remove_order(self, order_id):
-        
-        # Iterate over each order, within each price level
-        for book in [self.bids, self.asks]:
-            for price in list(book.keys()):
-                queue = book[price]
-                for i, order in enumerate(queue):
 
-                    # Check if the order ID matches
-                    if order.id == order_id:
-                        # Remove the order from the queue
-                        del queue[i]
-                        # If queue is empty, remove the price level
-                        if not queue:
-                            del book[price]
-                        # Found
-                        return order
+        # Check if order_id exists in the lookup
+        if order_id not in self.order_lookup:
+            return None
+
+        # Use map to get side and price
+        side, price = self.order_lookup[order_id]
+        book = self.bids if side == Side.BUY else self.asks
+
+        # Retrievve the relevant queue of orders
+        queue = book.get(price)
+        if not queue:
+            return None
+
+        # Iterate through the queue to find and remove the order
+        for i, order in enumerate(queue):
+
+            # Delete the order if it matches the order_id
+            if order.id == order_id:
+                del queue[i]
+                # If queue is empty, remove the price level
+                if not queue:
+                    del book[price]
+                # Remove from lookup dictionary
+                del self.order_lookup[order_id]
+                # Found and removed
+                return order
+
         # Not found
         return None
 
-    
+
     # Method to update the price of an order
     def update_order_price(self, order_id, new_price):
 
