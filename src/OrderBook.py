@@ -100,3 +100,18 @@ class OrderBook:
 
         # Order not found
         return None
+    
+    # Method to print the order book
+    def print_order_book(self):
+
+        # Bids (With IDs and total quantity)
+        print("Bids:")
+        for price, orders in self.bids.items():
+            total_qty = sum(order.quantity for order in orders)
+            print(f"Price: {price}, Total Qty: {total_qty}, Orders: {[order.id for order in orders]}")
+        
+        # Asks (With IDs and total quantity)
+        print("Asks:")
+        for price, orders in self.asks.items():
+            total_qty = sum(order.quantity for order in orders)
+            print(f"Price: {price}, Total Qty: {total_qty}, Orders: {[order.id for order in orders]}")
