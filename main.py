@@ -28,7 +28,7 @@ def main():
     order12 = Order(order_id=12, side=Side.BUY, quantity=50, order_type=OrderType.LIMIT, price=99)
 
     # Add market orders
-    order1_market = Order(order_id=13, side=Side.SELL, quantity=45, order_type=OrderType.MARKET)
+    order1_market = Order(order_id=13, side=Side.SELL, quantity=100, order_type=OrderType.MARKET)
 
     # Add these orders to the instruction queue as NEW_ORDER
     spy_market.instruction_queue.add_instruction(order1.to_instruction(InstructionType.NEW_ORDER))
@@ -50,7 +50,10 @@ def main():
         spy_market.matching_engine.process_next_instruction()
 
     # Print the order book after processing
-    spy_market.order_book.print_order_book()
+    print(spy_market.order_book)
+
+    # Print the executed trades
+    print(spy_market.executed_trades)
 
 
 if __name__ == "__main__":
