@@ -108,6 +108,7 @@ class MatchingEngine:
                 # Remove resting order if filled
                 if resting_order.quantity == 0:
                     order_queue.popleft()
+                    del self.order_book.order_lookup[resting_order.id]
 
             # Remove empty price level
             if not order_queue:
@@ -167,6 +168,7 @@ class MatchingEngine:
                 # Remove resting order if filled
                 if resting_order.quantity == 0:
                     queue.popleft()
+                    del self.order_book.order_lookup[resting_order.id]
 
             # Remove price level if empty
             if not queue:
