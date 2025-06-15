@@ -72,7 +72,7 @@ class TestOrderBook(unittest.TestCase):
     # Test updating an order's price
     def test_update_order_price(self):
 
-        # Order 1 is originally at price 101
+        # Assert: Order 1 is originally priced at 101
         self.assertIn(1, [o.id for o in self.book.bids[101]])
 
         # Update price to 98
@@ -87,6 +87,28 @@ class TestOrderBook(unittest.TestCase):
 
         # Assert: Lookup is updated
         self.assertEqual(self.book.order_lookup[1], (Side.BUY, 98))
+
+
+    # Test updating an order's quantity
+    def test_update_order_quantity(self):
+
+        # Assert: Order 3 originally has quantity 20 at price 99
+        queue_before = self.book.bids[99]
+        self.assertEqual(queue_before[0].id, 3)
+        self.assertEqual(queue_before[0].quantity, 20)
+
+        # Update quantity to 5
+        self.book.update_order_quantity(3, 5)
+
+        # Assert: Still at same price level
+        queue_after = self.book.bids[99]
+        self.assertEqual(queue_after[0].id, 3)
+
+        # Assert: Quantity updated
+        self.assertEqual(queue_after[0].quantity, 5)
+
+        # Assert: Lookup is unchanged
+        self.assertEqual(self.book.order_lookup[3], (Side.BUY, 99))
 
 
 if __name__ == '__main__':
