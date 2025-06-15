@@ -1,7 +1,6 @@
-from OrderBook import OrderBook
-from Order import Order, OrderType, Side
-from InstructionQueue import InstructionType
-from ExecutedTrades import Trade
+from src.Order import Order, OrderType, Side
+from src.InstructionQueue import InstructionType
+from src.ExecutedTrades import Trade
 from time import time
 
 class MatchingEngine:

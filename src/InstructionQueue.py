@@ -31,6 +31,11 @@ class InstructionQueue:
         self.active_instructions.append(instruction)
 
 
+    # Method to check if the queue is empty
+    def is_empty(self):
+        return len(self.active_instructions) == 0
+
+
     # Method to process the next instruction in the queue
     def process_next_instruction(self):
 

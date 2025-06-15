@@ -1,5 +1,5 @@
 from enum import Enum
-from InstructionQueue import Instruction, InstructionType
+from src.InstructionQueue import Instruction, InstructionType
 
 class OrderType(Enum):
     MARKET = "Market"
