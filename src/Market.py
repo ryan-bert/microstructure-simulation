@@ -1,13 +1,13 @@
 from OrderBook import OrderBook
-from Order import Order, OrderType, Side
-from InstructionQueue import Instruction, InstructionType, InstructionQueue
-from ExecutedTrades import Trade, ExecutedTrades
+from InstructionQueue import InstructionQueue
+from ExecutedTrades import ExecutedTrades
 from MatchingEngine import MatchingEngine
 
 class Market:
 
     # Constructor for the Market class
-    def __init__(self):
+    def __init__(self, ticker):
+        self.ticker = ticker
         self.order_book = OrderBook()
         self.instruction_queue = InstructionQueue()
         self.executed_trades = ExecutedTrades()

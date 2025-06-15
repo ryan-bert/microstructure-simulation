@@ -1,7 +1,7 @@
 from OrderBook import OrderBook
 from Order import Order, OrderType, Side
-from InstructionQueue import Instruction, InstructionType, InstructionQueue
-from ExecutedTrades import Trade, ExecutedTrades
+from InstructionQueue import InstructionType
+from ExecutedTrades import Trade
 from time import time
 
 class MatchingEngine:
