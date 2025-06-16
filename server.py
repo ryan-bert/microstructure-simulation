@@ -15,12 +15,16 @@ def submit_order():
     data = request.json
 
     try:
+        # Read Enum values
+        side = Side[data["side"].upper()]
+        order_type = OrderType[data["order_type"].upper()]
+
         # Create Order obeject with data from request
         order = Order(
-            order_id=data["order_id"],
-            side=Side[data["side"]],
+            order_id=None,
+            side=side,
             quantity=data["quantity"],
-            order_type=OrderType[data["order_type"]],
+            order_type=order_type,
             price=data.get("price")
         )
 
@@ -30,7 +34,7 @@ def submit_order():
 
         # Success: return order ID
         return jsonify({"status": "order received", "order_id": order.id}), 200
-    
+
     # Failure: return error message
     except Exception as e:
         return jsonify({"error": str(e)}), 400
