@@ -12,7 +12,7 @@ class Side(Enum):
 class Order:
 
     # Constructor for the Order class
-    def __init__(self, order_id, side, quantity, order_type, price=None):
+    def __init__(self, side, quantity, order_type, order_id = None, price=None):
         self.id = order_id
         self.side = side
         self.quantity = quantity

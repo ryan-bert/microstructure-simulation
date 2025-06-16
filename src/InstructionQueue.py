@@ -17,6 +17,7 @@ class Instruction:
         self.processed_timestamp = None     # Set by engine
         self.type = instruction_type
         self.order = order
+        self._order_id_counter = 1
 
 class InstructionQueue:
 
@@ -28,6 +29,13 @@ class InstructionQueue:
 
     # Method to add an instruction to the queue
     def add_instruction(self, instruction):
+
+        # Assign order ID if it's a NEW_ORDER
+        if instruction.type == InstructionType.NEW_ORDER and instruction.order.id is None:
+            instruction.order.id = self._order_id_counter
+            self._order_id_counter += 1
+
+        # Append the instruction to the active queue
         self.active_instructions.append(instruction)
 
 
