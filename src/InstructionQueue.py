@@ -17,7 +17,6 @@ class Instruction:
         self.processed_timestamp = None     # Set by engine
         self.type = instruction_type
         self.order = order
-        self._order_id_counter = 1
 
 class InstructionQueue:
 
@@ -25,6 +24,7 @@ class InstructionQueue:
     def __init__(self):
         self.active_instructions = deque()
         self.processed_instructions = deque()
+        self._order_id_counter = 1
 
 
     # Method to add an instruction to the queue
