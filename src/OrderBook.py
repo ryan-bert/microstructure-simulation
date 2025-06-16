@@ -112,18 +112,24 @@ class OrderBook:
         if self.is_empty():
             return "Order Book is empty."
 
-        # Convert bids to string format
-        lines = ["Bids:"]
-        for price, orders in self.bids.items():
+        # Function to format each price level with its orders
+        def format_level(price, orders):
             total_qty = sum(order.quantity for order in orders)
-            order_ids = [order.id for order in orders]
-            lines.append(f"Price: {price}, Total Qty: {total_qty}, Orders: {order_ids}")
+            bar = '█' * (total_qty // 2)
+            return f"{price:>8.2f} | {bar:<30} {total_qty:>4}  IDs: {[order.id for order in orders]}"
 
-        # Convert asks to string format
-        lines.append("Asks:")
-        for price, orders in self.asks.items():
-            total_qty = sum(order.quantity for order in orders)
-            order_ids = [order.id for order in orders]
-            lines.append(f"Price: {price}, Total Qty: {total_qty}, Orders: {order_ids}")
+        # Asks (shown top-down, ascending prices but reversed)
+        lines = []
+        lines.append("       --- Asks (Sell) ---")
+        for price in reversed(self.asks):
+            lines.append(format_level(price, self.asks[price]))
+
+        # Add a separator for clarity
+        lines.append("       ----- Spread ------")
+
+        # Bids (shown bottom-up, descending prices)
+        for price in self.bids:
+            lines.append(format_level(price, self.bids[price]))
+        lines.append("       --- Bids (Buy) ----")
 
         return "\n".join(lines)
