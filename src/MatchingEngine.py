@@ -52,6 +52,11 @@ class MatchingEngine:
         # Invalid instruction type
         else:
             raise ValueError("Invalid instruction type")
+        
+        # Terminal log after each instruction
+        print("\n📥 Processed Instruction:", instruction.type.name)
+        print("\n📘 Order Book Snapshot:\n", self.order_book)
+        print("-" * 80)
 
 
     # Method to match market orders
