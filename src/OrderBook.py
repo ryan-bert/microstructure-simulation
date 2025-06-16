@@ -118,16 +118,16 @@ class OrderBook:
             bar = '█' * (total_qty // 2)
             return f"{price:>8.2f} | {bar:<30} {total_qty:>4}  IDs: {[order.id for order in orders]}"
 
-        # Asks (shown top-down, ascending prices but reversed)
+        # Asks
         lines = []
         lines.append("       --- Asks (Sell) ---")
         for price in reversed(self.asks):
             lines.append(format_level(price, self.asks[price]))
 
-        # Add a separator for clarity
+        # Separator for clarity
         lines.append("       ----- Spread ------")
 
-        # Bids (shown bottom-up, descending prices)
+        # Bids
         for price in self.bids:
             lines.append(format_level(price, self.bids[price]))
         lines.append("       --- Bids (Buy) ----")
