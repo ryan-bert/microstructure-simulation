@@ -28,8 +28,10 @@ def submit_order():
         instr = order.to_instruction(InstructionType.NEW_ORDER)
         market.instruction_queue.add_instruction(instr)
 
-        # Return status response
-        return jsonify({"status": "order received"}), 200
+        # Success: return order ID
+        return jsonify({"status": "order received", "order_id": order.id}), 200
+    
+    # Failure: return error message
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
