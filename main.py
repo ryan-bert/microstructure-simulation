@@ -30,6 +30,9 @@ def main():
     # Add market orders
     order1_market = Order(order_id=13, side=Side.SELL, quantity=100, order_type=OrderType.MARKET)
 
+    # Add marketable limit orders
+    order1_marketable = Order(order_id=14, side=Side.BUY, quantity=35, order_type=OrderType.LIMIT, price=102)
+
     # Add these orders to the instruction queue as NEW_ORDER
     spy_market.instruction_queue.add_instruction(order1.to_instruction(InstructionType.NEW_ORDER))
     spy_market.instruction_queue.add_instruction(order2.to_instruction(InstructionType.NEW_ORDER))
@@ -44,6 +47,7 @@ def main():
     spy_market.instruction_queue.add_instruction(order11.to_instruction(InstructionType.NEW_ORDER))
     spy_market.instruction_queue.add_instruction(order12.to_instruction(InstructionType.NEW_ORDER))
     spy_market.instruction_queue.add_instruction(order1_market.to_instruction(InstructionType.NEW_ORDER))
+    spy_market.instruction_queue.add_instruction(order1_marketable.to_instruction(InstructionType.NEW_ORDER))
 
     # Process the instructions in the queue
     while not spy_market.instruction_queue.is_empty():
